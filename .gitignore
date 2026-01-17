@@ -31,3 +31,4 @@ bin/
 # Environment files
 .env
 .env.local
+/api
