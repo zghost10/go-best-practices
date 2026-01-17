@@ -1,0 +1,16 @@
+### get all users
+GET http://localhost:8080/users
+
+### get user by id
+GET http://localhost:8080/users/f7723fa5-6c39-4480-9033-d713d6ded395
+
+### create user
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+    "first_name": "John Doe",
+    "last_name": "Doe",
+    "email": "john.doe@example.com",
+    "password": "123456"
+}
