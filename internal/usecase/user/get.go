@@ -1,4 +1,4 @@
-package user
+package usecase
 
 import "github.com/zghost10/go-best-practices/internal/domain/user"
 

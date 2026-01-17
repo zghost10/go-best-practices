@@ -1,16 +1,16 @@
-package user
+package usecase
 
 import "github.com/zghost10/go-best-practices/internal/domain/user"
 
 type ListUsersOutput struct {
-	Users []ListUser
+	Users []ListUser `json:"users"`
 }
 
 type ListUser struct {
-	ID        string
-	FirstName string
-	LastName  string
-	Email     string
+	ID        string `json:"id"`
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	Email     string `json:"email"`
 }
 
 type ListUsersUseCase struct {
@@ -27,15 +27,18 @@ func (u *ListUsersUseCase) Execute() (*ListUsersOutput, error) {
 		return nil, err
 	}
 
-	var listUsersOutput ListUsersOutput
-	for _, user := range users {
-		listUsersOutput.Users = append(listUsersOutput.Users, ListUser{
+	out := ListUsersOutput{
+		Users: make([]ListUser, len(users)),
+	}
+
+	for i, user := range users {
+		out.Users[i] = ListUser{
 			ID:        user.ID,
 			FirstName: user.FirstName,
 			LastName:  user.LastName,
 			Email:     user.Email,
-		})
+		}
 	}
 
-	return &listUsersOutput, nil
+	return &out, nil
 }

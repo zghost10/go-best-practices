@@ -1,9 +1,8 @@
-package user
+package repository
 
 import (
-	"fmt"
-
 	"github.com/zghost10/go-best-practices/internal/domain/user"
+	er "github.com/zghost10/go-best-practices/internal/infra/http/gin/error"
 )
 
 func NewInMemoryUserRepo() user.IUserRepository {
@@ -24,7 +23,7 @@ func (u *UserInMemoryRepo) Create(user user.User) error {
 func (u *UserInMemoryRepo) Get(identifier string) (user.User, error) {
 	usr, ok := u.users[identifier]
 	if !ok {
-		return user.User{}, fmt.Errorf("user not found")
+		return user.User{}, er.ErrUserNotFound
 	}
 	return usr, nil
 }

@@ -1,9 +1,12 @@
-package user
+package handler
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/zghost10/go-best-practices/internal/infra/http/gin/dto"
+	er "github.com/zghost10/go-best-practices/internal/infra/http/gin/error"
 	usecase "github.com/zghost10/go-best-practices/internal/usecase/user"
 )
 
@@ -25,7 +28,7 @@ func NewUserHandler(e *gin.Engine, createUserUseCase *usecase.CreateUserUseCase,
 }
 
 func (h *UserHandler) CreateUser(c *gin.Context) {
-	var input CreateUserDto
+	var input dto.CreateUserDto
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
@@ -49,7 +52,11 @@ func (h *UserHandler) GetUser(c *gin.Context) {
 	input.Identifier = c.Param("id")
 	getUserOutput, err := h.getUserUseCase.GetUser(input)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		if errors.Is(err, er.ErrUserNotFound) {
+			c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
